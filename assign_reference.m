@@ -22,11 +22,13 @@ end
 function [x_ref, y_ref ,j] = find_next( x, y, caminho )
     
     j = 1;
+    dist = sqrt((caminho(1,j)-x)^2+(caminho(2,j)-y)^2);
     
     %Se o ponto já estiver numa posição passada, encontra ponto seguinte
-    while( atan((y-caminho(2,j))/(x-caminho(1,j))) > pi/2)
+    while( atan((y-caminho(2,j))/(x-caminho(1,j))) > pi/2 && dist < 1)
         
         j = j+1;
+        dist = sqrt((caminho(1,j)-x)^2+(caminho(2,j)-y)^2);
         
     end
     

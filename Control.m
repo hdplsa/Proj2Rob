@@ -4,7 +4,7 @@ function [ v, omega ] = Control( x,y,theta,xref,yref )
     vmax = 0.35;
     k1 = 2;
     k2 = 0.5; 
-    k3 = 1;
+    k3 = 20;
     
     e = sqrt((xref-x)^2+(yref-y)^2);
     phi = atan2((yref-y),(xref-x));    

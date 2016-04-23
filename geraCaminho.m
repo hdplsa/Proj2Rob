@@ -8,6 +8,7 @@ function [path] = geraCaminho(l,d)
     r = d/2;
     path = [];
     step = 0.75;
+    step_curva = 0.05;
     
     %1ª linha vertical
     p = -1*(0:step:l);
@@ -19,7 +20,7 @@ function [path] = geraCaminho(l,d)
     path = pathaux;
     
     %Canto inferior esquerdo
-    p = -1*(l:step:l+r);
+    p = -1*(l:step_curva:l+r);
     pathaux = [];
     for i=1:length(p)
         pathaux(1,i) = 2*r-sqrt(r^2-(p(i)-(-l))^2);
@@ -37,7 +38,7 @@ function [path] = geraCaminho(l,d)
     path = [path pathaux];
     
     %Canto inferior direito
-    p = -1*(l:step:l+r);
+    p = -1*(l:step_curva:l+r);
     p = flip(p);
     pathaux = [];
     for i=1:length(p)
@@ -47,7 +48,7 @@ function [path] = geraCaminho(l,d)
     path = [path pathaux];
     
     %2ª linha vertical
-    p = -1*(0:step:l);
+    p = 1*(-l:step:0);
     pathaux = [];
     for i=1:length(p)
         pathaux(1,i) = 3*r+l;
@@ -57,7 +58,7 @@ function [path] = geraCaminho(l,d)
     path = [path pathaux];
     
     %Canto superior direito
-    p = (0:step:r);
+    p = (0:step_curva:r);
     pathaux = [];
     for i=1:length(p)
         pathaux(1,i) = (2*r+l)+sqrt(r^2-(p(i))^2);
@@ -76,7 +77,7 @@ function [path] = geraCaminho(l,d)
     path = [path pathaux];
     
     %Canto superior esquerdo
-    p = (0:step:r);
+    p = (0:step_curva:r);
     p = flip(p);
     pathaux = [];
     for i=1:length(p)
