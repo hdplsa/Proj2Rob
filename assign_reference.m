@@ -7,11 +7,11 @@ function [ x_ref, y_ref, j ] = assign_reference( x, y, x_ref, y_ref, caminho )
     angle = atan((y_ref-y)/(x_ref-x));
     j = 0;
     
-    if abs(angle) > pi/6
+    if abs(angle) > pi/2
         
         [x_ref, y_ref, j] = find_next(x,y, caminho);
         
-    elseif norm((x_ref-x)+(y_ref-y)) < 1e-3
+    elseif norm((x_ref-x)+(y_ref-y)) < 10e-2
         
         [x_ref, y_ref, j] = find_next(x,y, caminho);
         

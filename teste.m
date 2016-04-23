@@ -1,11 +1,8 @@
-close all; clear all;
+close all; clear;
 
-x = 0; y = 0; theta=0;
-xref = 1; yref = 1;
-t = 1e-3; tmax = 20;
-
-x_ref = ones(1,tmax/t);
-x_ref(round(length(x_ref)/2):end) = 2;
+x = 0; y = 0; theta=-pi/2;
+xref = -1; yref = 1;
+t = 1e-3; tmax = 100;
 
 x_store = zeros(1,tmax/t);
 y_store = zeros(1,tmax/t);
@@ -13,7 +10,7 @@ t_store = zeros(1,tmax/t);
 
 for i = 1:tmax/t
 
-    [v, omega] = Control(x,y,theta,x_ref(i),yref);
+    [v, omega] = Control(x,y,theta,xref,yref);
     [x,y,theta] = Kinematics(v,omega,x,y,theta,t);
     
     x_store(i) = x;

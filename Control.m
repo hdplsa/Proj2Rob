@@ -2,13 +2,12 @@ function [ v, omega ] = Control( x,y,theta,xref,yref )
  %Controlador do robot
     
     vmax = 0.35;
-    k1 = 1;
+    k1 = 2;
     k2 = 0.5; 
     k3 = 1;
     
-    e = norm((xref-x)+(yref-y));
-    phi = atan2((yref-y),(xref-x));
-            
+    e = sqrt((xref-x)^2+(yref-y)^2);
+    phi = atan2((yref-y),(xref-x));    
     alpha = phi-theta;
     
     if e > 1e-6 % Quando e == 0, v = NaN
@@ -21,5 +20,6 @@ function [ v, omega ] = Control( x,y,theta,xref,yref )
         v = 0;
         omega = 0;
     end
+    
 end
 

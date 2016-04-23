@@ -2,16 +2,22 @@ close all; clear;
 
 % Usar um ponteio laser para medir o erro da odometria 
 
-x = 0.25; y = -0.5; theta=-pi/2;
-xref = 0; yref = 0;
+% Posição e orientação auxiliares do robô
+x = 0.25; y = -0.75; theta=-pi/4;
 t = 1e-2; tmax = 100;
 
+% Cálculo do caminho
+caminho = geraCaminho(14.5,0.5);
+
+% Procura a posição do caminho mais próxima do robô
+[~,j] = min(sqrt(sum(abs(caminho - repmat([x,y]',1,length(caminho))),1))); j = j(1);
+xref = caminho(1,j); yref = caminho(2,j);
+
+% Iniciação de vars auxiliares
 x_store = zeros(1,tmax/t);
 y_store = zeros(1,tmax/t);
 x_ref_store = zeros(1,tmax/t);
 y_ref_store = zeros(1,tmax/t);
-caminho = geraCaminho(14.5,0.5);
-j = 1;
 
 for i = 1:tmax/t
     
