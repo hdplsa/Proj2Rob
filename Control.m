@@ -2,9 +2,9 @@ function [ v, omega ] = Control( x,y,theta,xref,yref )
  %Controlador do robot
     
     vmax = 0.35;
-    k1 = 2;
+    k1 = 1;
     k2 = 0.5; 
-    k3 = 20;
+    k3 = 2;
     
     e = sqrt((xref-x)^2+(yref-y)^2);
     phi = atan2((yref-y),(xref-x));    

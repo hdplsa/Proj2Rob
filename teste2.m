@@ -17,6 +17,8 @@ xref = caminho(1,j); yref = caminho(2,j);
 x_store = zeros(1,tmax/t);
 y_store = zeros(1,tmax/t);
 t_store = zeros(1,tmax/t);
+v_store = zeros(1,tmax/t);
+w_store = zeros(1,tmax/t);
 x_ref_store = zeros(1,tmax/t);
 y_ref_store = zeros(1,tmax/t);
 
@@ -31,6 +33,8 @@ for i = 1:tmax/t
     x_store(i) = x;
     y_store(i) = y;
     t_store(i) = theta;
+    v_store(i) = v;
+    w_store(i) = omega;
     
     x_ref_store(i) = xref;
     y_ref_store(i) = yref;
@@ -45,7 +49,7 @@ end
 
 close(h);
 
-win = figure; hold on;
+figure; hold on;
 
 time = linspace(0,tmax,tmax/t);
 
@@ -59,7 +63,15 @@ plot(time,y_store); xlabel('time [s]'); ylabel('y [m]');
 
 subplot(3,1,3); hold on;
 plot(time,t_store);  title('theta');
-xlabel('time [s]'); ylabel('theta [m]');
+xlabel('time [s]'); ylabel('theta [rad]');
+
+figure; hold on;
+
+subplot(2,1,1);
+plot(time,v_store);  title('v');
+
+subplot(2,1,2);
+plot(time,w_store);  title('w');
 
 figure; hold on;
 
