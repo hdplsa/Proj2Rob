@@ -3,8 +3,8 @@ close all; clear;
 % Usar um ponteio laser para medir o erro da odometria 
 
 % Posição e orientação auxiliares do robô
-x = 0.25; y = -0.75; theta=-pi/4;
-t = 1e-2; tmax = 300;
+x = 0.25; y = 0; theta=-pi/4;
+t = 5e-2; tmax = 100;
 
 % Cálculo do caminho
 caminho = geraCaminho(14.5,0.5);

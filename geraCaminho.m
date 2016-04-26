@@ -7,8 +7,8 @@ function [path] = geraCaminho(l,d)
     close all;
     r = d/2;
     path = [];
-    step = 2;
-    step_curva = 0.05;
+    step = l;
+    step_curva = 0.2;
     
     %1ª linha vertical
     p = -1*(0:step:l);
