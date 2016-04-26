@@ -1,4 +1,4 @@
-function [px,py] = geraCaminho3(l1,l2,l3,d, DEBUG)
+function [pontos] = geraCaminho3(l1,l2,l3,d, DEBUG)
     
     if nargin == 0
         l1=3;
@@ -16,7 +16,7 @@ function [px,py] = geraCaminho3(l1,l2,l3,d, DEBUG)
     
     pontos = [0,0 ; l2/2,l1; l2,l1+d; l2,l3+l1-d; l2+d,l3+l1;
         l2+l3-d,l3+l1; l2+l3,l3-d+l1; l2+l3,d+l1; l2+l3-d,l1;
-        l2/2,l1; 0,0];
+        l2,l1 ; l2/2,l1; 0,0];
     
     t = linspace(0,5*60,size(pontos,1));
     
