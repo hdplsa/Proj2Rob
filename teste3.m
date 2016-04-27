@@ -4,7 +4,7 @@ close all; clear;
 
 % Posição e orientação auxiliares do robô
 x = 0; y = 0; theta=pi/2;
-t = 10e-2; tmax = 500;
+t = 10e-2; tmax = 300;
 
 % Cálculo do caminho
 caminho = geraCaminho3(3,3,14.5,0.5)';
@@ -29,7 +29,7 @@ for i = 2:tmax/t
     [xref, yref, aux] = assign_reference(x,y,xref,yref, caminho(:,j:end));
     j = j + aux;
     
-    [v, omega,e] = Control(x,y,theta,xref,yref,v_store(i-1),w_store(i-1));
+    [v, omega,e] = Control2(x,y,theta,xref,yref,v_store(i-1),w_store(i-1),e_store,i);
     [x,y,theta] = Kinematics(v,omega,x,y,theta,t);
     
     x_store(i) = x;
