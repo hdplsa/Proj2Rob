@@ -1,9 +1,9 @@
-function [ v, omega ] = Control( x,y,theta,xref,yref,v_last,w_last )
+function [ v, omega, e ] = Control( x,y,theta,xref,yref,v_last,w_last )
     %Controlador do robot
     
     vmax = 0.35;
-    k1 = 1;
-    k2 = 0.5;
+    k1 = 0.25;
+    k2 = 0.3;
     k3 = 5;
     
     e = sqrt((xref-x)^2+(yref-y)^2);
@@ -38,7 +38,7 @@ function [ v, omega ] = Control( x,y,theta,xref,yref,v_last,w_last )
     % colocando uma saturação na variação entre ciclos
     
     delta_v = 0.01;
-    delta_w = 0.050;
+    delta_w = 0.05;
     
     if abs(v) > abs(v_last) + delta_v
         v = v_last + sign(v)*delta_v;
