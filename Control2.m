@@ -1,8 +1,8 @@
-function [ v, omega, e ] = Control( x,y,theta,xref,yref,v_last,w_last )
-    %Controlador do robot
+function [ v, omega, e ] = Control2( x,y,theta,xref,yref,v_last,w_last, est,i)
+     %Controlador do robot
     
     vmax = 0.35;
-    k1 = 0.25;
+    k1 = 1;
     k2 = 0.3;
     k3 = 5;
     
@@ -24,8 +24,9 @@ function [ v, omega, e ] = Control( x,y,theta,xref,yref,v_last,w_last )
     end
     
     if e > 1e-6 % Quando e == 0, v = NaN
-        v = vmax*tanh(k1*e);
-        omega = vmax*((1+k2*phi/alpha)*tanh(k1*e)/e*sin(alpha)+k3*tanh(alpha));
+        aux = diff(est) ;
+        v = vmax*tanh(k1*e)/aux(i);
+        omega = (vmax*((1+k2*phi/alpha)*tanh(k1*e)/e*sin(alpha)+k3*tanh(alpha)))/aux(i);
         if isnan(omega)
             omega = 0;
         end
@@ -37,22 +38,27 @@ function [ v, omega, e ] = Control( x,y,theta,xref,yref,v_last,w_last )
     % Impede que o controlador imponha controlos com variações bruscas,
     % colocando uma saturação na variação entre ciclos
     
-    delta_v = 0.01;
-    delta_w = 0.05;
+    %if (e == 0) return;
+        
+    %v = v*(e*10^(-2));
+    %omega = omega*(e*10^(-2));
     
-    if abs(v) > abs(v_last) + delta_v
-        v = v_last + sign(v)*delta_v;
-    elseif abs(v) < abs(v_last) - delta_v
-        v = v_last - sign(v)*delta_v;
-    end
+    %return;
     
-    dif = omega - w_last;
+    %if abs(v) > abs(v_last) + delta_v
+    %    v = v_last + sign(v)*delta_v;
+    %elseif abs(v) < abs(v_last) - delta_v
+    %    v = v_last - sign(v)*delta_v;
+    %end
     
-    if dif >= delta_w
-        omega = w_last + delta_w;
-    elseif dif < - delta_w
-        omega = w_last - delta_w;
-    end
-         
+    %dif = omega - w_last;
+    
+    %if dif >= delta_w
+    %    omega = w_last + delta_w;
+    %elseif dif < - delta_w
+    %    omega = w_last - delta_w;
+    %end
+    
+    
 end
 

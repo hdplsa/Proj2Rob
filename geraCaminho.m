@@ -1,14 +1,17 @@
-function [path] = geraCaminho(l,d)
+function [path] = geraCaminho(l,d,DEBUG)
     %Função que gera todos os pontos do caminho que o robot tem que percorrer
     %   l: lado do quadrado central da torre
     %   d: largura do corredor da torre
     
+    if nargin <  3
+        DEBUG = 0;
+    end
     
     close all;
     r = d/2;
     path = [];
-    step = 0.75;
-    step_curva = 0.05;
+    step = l;
+    step_curva = 0.5;
     
     %1ª linha vertical
     p = -1*(0:step:l);
@@ -87,9 +90,11 @@ function [path] = geraCaminho(l,d)
     path = [path pathaux];
     
     %Gráfico do caminho
-    % plot(path(1,:),path(2,:));
-    % title('Caminho a ser percorrido pelo Robot');
-    % xlabel('x');
-    % ylabel('y');
+    if DEBUG
+        plot(path(1,:),path(2,:));
+        title('Caminho a ser percorrido pelo Robot');
+        xlabel('x');
+        ylabel('y');
+    end
 end
 

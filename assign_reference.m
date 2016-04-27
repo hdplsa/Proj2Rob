@@ -11,7 +11,7 @@ function [ x_ref, y_ref, j ] = assign_reference( x, y, x_ref, y_ref, caminho )
         
         [x_ref, y_ref, j] = find_next(x,y, caminho);
         
-    elseif norm((x_ref-x)+(y_ref-y)) < 10e-2
+    elseif sqrt((x_ref-x)^2+(y_ref-y)^2) < 10e-2
         
         [x_ref, y_ref, j] = find_next(x,y, caminho);
         
