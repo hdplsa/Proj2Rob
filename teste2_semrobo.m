@@ -2,14 +2,14 @@ close all; clear;
 
 % Identifica as vars que guardam dados como globais
 
-global x_store y_store t_store v_store w_store x_ref_store y_ref_store e_store h3;
+global x_store y_store t_store v_store w_store x_ref_store y_ref_store e_store x y theta t h1 h2 h3;
 
 % Inicia a serial port e o robô
-sp = init_robot();
+sp = 1;
 
 % Posição e orientação auxiliares do robô
-odom = robot.pioneer_read_odometry();
-x = odom(1); y = odom(2); theta = odom(3);
+%odom = robot.pioneer_read_odometry();
+x = 0; y = 0; theta = pi/2;
 t = 10e-2; tmax = 500;
 
 % Cálculo do caminho
@@ -22,8 +22,8 @@ xref = caminho(1,j); yref = caminho(2,j);
 
 % Iniciação do objeto timer que irá correr o envio da informação
 
-tim = timer('Period', t, 'ExecutionMode', 'fixedRate');
-tim.TimerFcn = {@sendData,sp,caminho(:,j:end)};
+tim = timer('Period', t/10, 'ExecutionMode', 'fixedSpacing');
+tim.TimerFcn = {@sendData_semrobo,sp,caminho(:,j:end)};
 
 % Iniciação de vars auxiliares
 x_store = zeros(1,tmax/t);
@@ -42,28 +42,29 @@ start(tim);
 % Plots
 % Figura 1 - plots espaço/angulo tempo (x,t), (y,t) e (theta,t)
 
-figure; hold on;
+h1 = figure; hold on;
 
-time = linspace(0,tmax,t_max/t);
+time = linspace(0,tmax,tmax/t);
 
 subplot(3,1,1); hold on;
-plot(time,x_ref_store);  title('x');
+plot(time,x_ref_store); linkdata on; title('x');
 plot(time,x_store); xlabel('time [s]'); ylabel('x [m]');
 
 subplot(3,1,2); hold on;
-plot(time,y_ref_store);  title('y');
+plot(time,y_ref_store); linkdata on; title('y');
 plot(time,y_store); xlabel('time [s]'); ylabel('y [m]');
 
 subplot(3,1,3); hold on;
-plot(time,t_store);  title('theta');
+plot(time,t_store); linkdata on; title('theta');
 xlabel('time [s]'); ylabel('theta [rad]');
+
 
 % Figura 2 - Velocidades conforme o tempo (v,t) e (omega,t)
 
 figure; hold on;
 
 subplot(2,1,1);
-plot(time,v_store);  title('v');
+h2 = plot(time,v_store);  title('v');
 
 subplot(2,1,2);
 plot(time,w_store);  title('w');
