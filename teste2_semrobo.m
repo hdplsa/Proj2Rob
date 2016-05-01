@@ -47,15 +47,15 @@ h1 = figure; hold on;
 time = linspace(0,tmax,tmax/t);
 
 subplot(3,1,1); hold on;
-plot(time,x_ref_store); linkdata on; title('x');
+plot(time,x_ref_store); title('x');
 plot(time,x_store); xlabel('time [s]'); ylabel('x [m]');
 
 subplot(3,1,2); hold on;
-plot(time,y_ref_store); linkdata on; title('y');
+plot(time,y_ref_store); title('y');
 plot(time,y_store); xlabel('time [s]'); ylabel('y [m]');
 
 subplot(3,1,3); hold on;
-plot(time,t_store); linkdata on; title('theta');
+plot(time,t_store); title('theta');
 xlabel('time [s]'); ylabel('theta [rad]');
 
 
@@ -73,5 +73,6 @@ plot(time,w_store);  title('w');
 
 figure; hold on;
 
-h3 = plot(x_store,y_store); xlabel('x [m]'); ylabel('y [m]');
+h3 = plot(x_store,y_store); 
+xlabel('x [m]'); ylabel('y [m]');
 plot(caminho(1,:),caminho(2,:));
