@@ -29,7 +29,7 @@ for i = 2:tmax/t
     [xref, yref, aux] = assign_reference(x,y,xref,yref, caminho(:,j:end));
     j = j + aux;
     
-    [v, omega,e] = Control(x,y,theta,xref,yref,v_store(i-1),w_store(i-1));
+    [v,omega,e] = Control2(x,y,theta,xref,yref,e_store);
     [x,y,theta] = Kinematics(v,omega,x,y,theta,t);
     
     x_store(i) = x;
@@ -51,7 +51,7 @@ for i = 2:tmax/t
 end
 
 close(h);
-integrateErro(e_store,10e-2);
+%integrateErro(e_store,10e-2);
 
 % Apaga posições do vetor superfluas (caso não cheguemos ao valor final de
 % tempo de simulação, ou seja, o robô é mais rápido do que o tempo de

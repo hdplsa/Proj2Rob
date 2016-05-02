@@ -1,4 +1,4 @@
-function [ v, omega, e ] = Control2( x,y,theta,xref,yref,v_last,w_last, est,i)
+function [ v, omega, e ] = Control2(x,y,theta,xref,yref,erro)
      %Controlador do robot
     
     vmax = 0.35;
@@ -23,10 +23,12 @@ function [ v, omega, e ] = Control2( x,y,theta,xref,yref,v_last,w_last, est,i)
         end
     end
     
+    %Integração do erro para obrigar a variações suaves no erro
+    ei = integrateErro(erro,10e-2);
+    
     if e > 1e-6 % Quando e == 0, v = NaN
-        aux = diff(est) ;
-        v = vmax*tanh(k1*e)/aux(i);
-        omega = (vmax*((1+k2*phi/alpha)*tanh(k1*e)/e*sin(alpha)+k3*tanh(alpha)))/aux(i);
+        v = vmax*tanh(k1*ei);
+        omega = (vmax*((1+k2*phi/alpha)*tanh(k1*ei)/ei*sin(alpha)+k3*tanh(alpha)));
         if isnan(omega)
             omega = 0;
         end
