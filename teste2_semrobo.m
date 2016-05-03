@@ -13,7 +13,7 @@ x = 0; y = 0; theta = pi/2;
 t = 10e-2; tmax = 500;
 
 % Cálculo do caminho
-caminho = geraCaminho3(3,3,14.5,0.5)';
+caminho = geraCaminho3(3,3,15.7,1.67)';
 caminho = flipud(caminho')'; caminho = [caminho, [0;0]];
 
 % Procura a posição do caminho mais próxima do robô
