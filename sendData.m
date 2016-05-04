@@ -20,7 +20,7 @@ function sendData(obj, event, sp, caminho, omega)
     xref = x_ref_store(i-1);
     yref = y_ref_store(i-1);
     
-    odom = robot.pioneer_read_odometry();
+    odom = get_odom();
     x = odom(1); y = odom(2); theta = odom(3);
     
     [xref, yref, aux] = assign_reference(x,y,xref,yref, caminho(:,j:end));
@@ -28,7 +28,8 @@ function sendData(obj, event, sp, caminho, omega)
     
     [v, omega,e] = Control(x,y,theta,xref,yref,v_store(i-1),w_store(i-1));
     
-    robot.pioneer_set_controls(sp,round(v*1000),round(omega*1000));
+    pioneer_set_controls(sp,round(v*1000),round(omega*180/pi));
+    
     
     x_store(i) = x;
     y_store(i) = y;
@@ -45,6 +46,8 @@ function sendData(obj, event, sp, caminho, omega)
     end
     
     update_plots(x_store, y_store, t_store);
+    
+    fprintf('Ciclo %d\n',i);
     
 end
 

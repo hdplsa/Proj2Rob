@@ -5,15 +5,15 @@ close all; clear;
 global x_store y_store t_store v_store w_store x_ref_store y_ref_store e_store h3;
 
 % Inicia a serial port e o robô
-sp = init_robot();
+sp = init_robot('COM3');
 
 % Posição e orientação auxiliares do robô
-odom = robot.pioneer_read_odometry();
+odom = get_odom();
 x = odom(1); y = odom(2); theta = odom(3);
-t = 10e-2; tmax = 500;
+t = 0.5; tmax = 500;
 
 % Cálculo do caminho
-caminho = geraCaminho3(3,3,15.7,1.67)';
+caminho = geraCaminho3(2.7,3.6+1.67,15.7,1.67)';
 caminho = flipud(caminho')'; caminho = [caminho, [0;0]];
 
 % Procura a posição do caminho mais próxima do robô
@@ -35,6 +35,7 @@ x_ref_store = zeros(1,tmax/t);
 y_ref_store = zeros(1,tmax/t);
 e_store = zeros(1,tmax/t);
 
+x_store(1) = x; y_store(1) = y; t_store(1) = theta;
 x_ref_store(1) = xref; y_ref_store(1) = yref; 
 
 start(tim);
@@ -44,7 +45,7 @@ start(tim);
 
 figure; hold on;
 
-time = linspace(0,tmax,t_max/t);
+time = linspace(0,tmax,tmax/t);
 
 subplot(3,1,1); hold on;
 plot(time,x_ref_store);  title('x');

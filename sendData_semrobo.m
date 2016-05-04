@@ -1,4 +1,4 @@
-function sendData(obj, event, sp, caminho)
+function sendData_semrobo(obj, event, sp, caminho)
 %Função de callback que envia dados para o robot (não alterar
 %declaração!!!)
 %http://www.mathworks.com/help/matlab/creating_plots/callback-definition.html
