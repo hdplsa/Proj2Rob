@@ -5,11 +5,11 @@ close all; clear; delete(timerfindall)
 global v v_act omega omega_act;
 
 % Inicia a serial port e o robô
-sp = 1;
+sp = init_robot('COM3');
 
 % Posição e orientação auxiliares do robô
-%odom = robot.pioneer_read_odometry();
-x = 0; y = 0; theta = 0;
+odom = get_odom();
+x = odom(1); y = odom(2); theta = odom(3);
 t = 0.5; tmax = 10000; tempo = 0.1;
 
 % Cálculo do caminho
@@ -22,8 +22,8 @@ xref = caminho(1,j); yref = caminho(2,j);
 
 % Iniciação do objeto timer que irá correr o envio da informação
 
-tim = timer('Period', t/10, 'ExecutionMode', 'fixedSpacing');
-tim.TimerFcn = {@send_data,sp};
+tim = timer('Period', t, 'ExecutionMode', 'fixedSpacing');
+tim.TimerFcn = {@send_data_robot,sp};
 
 % Iniciação de vars auxiliares
 x_store = zeros(1,tmax/t);
@@ -84,11 +84,13 @@ button = 1;
 i = 2;
 while button
     
+    odom = get_odom();
+    x = odom(1); y = odom(2); theta = odom(3);
+    
     [xref, yref, aux] = assign_reference(x,y,xref,yref, caminho(:,j:end));
     j = j + aux;
     
     [v, omega,e] = Control(x,y,theta,xref,yref,v_store(i-1),w_store(i-1));
-    [x,y,theta] = Kinematics(v_act,omega_act,x,y,theta,tempo);
     
     x_store(i) = x;
     y_store(i) = y;
@@ -107,11 +109,12 @@ while button
     end
     
     i = i+1;
-    pause(tempo/10);
-    if mod(i,50) == 0
+    
+    pause(tempo);
+    
+    if mod(i,10) == 0
         fprintf('Ciclo %d\n',i);
-        tic
-        update_plots(h, x_store, x_ref_store, y_store, y_ref_store, t_store, v_store, w_store, time_store);
-        toc
+        update_plots( h, x_store, y_store, t_store,v_store, w_store, time_store );
     end
 end
+

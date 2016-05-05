@@ -1,4 +1,4 @@
-close all; clear;
+close all; clear;  delete(timerfindall)
 
 % Identifica as vars que guardam dados como globais
 
