@@ -2,26 +2,26 @@ function [ v, omega, e ] = Control( x,y,theta,xref,yref,v_last,w_last )
     %Controlador do robot
     
     vmax = 0.15;
-    k1 = 0.15;
+    k1 = 0.5;
     k2 = 0.3;
     k3 = 5;
-    
-        % Por vezes o alpha vai para além de [-pi,pi) e portanto, como a lei de
-    % controlo contém tangentes hiperbólicas (que não são periódicas), o
-    % valor alpha+2*pi não é igual, portanto, tem que se corrigir.
-    if theta > pi
-        while theta > pi
-            theta = theta - 2*pi;
-        end
-    elseif theta < -pi
-        while theta < -pi
-            theta = theta + 2*pi;
-        end
-    end
-    
+      
     e = sqrt((xref-x)^2+(yref-y)^2);
     phi = atan2((yref-y),(xref-x));
     alpha = phi-theta;
+    
+    % Por vezes o alpha vai para além de [-pi,pi) e portanto, como a lei de
+    % controlo contém tangentes hiperbólicas (que não são periódicas), o
+    % valor alpha+2*pi não é igual, portanto, tem que se corrigir.
+    if alpha > pi
+        while alpha > pi
+            alpha = alpha - 2*pi;
+        end
+    elseif alpha < -pi
+        while alpha < -pi
+            alpha = alpha + 2*pi;
+        end
+    end
     
     if e > 1e-6 % Quando e == 0, v = NaN
         v = vmax*tanh(k1*e);

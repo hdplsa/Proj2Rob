@@ -4,7 +4,7 @@ close all; clear;
 
 % Posição e orientação auxiliares do robô
 x = 0; y = 0; theta=pi/2;
-t = 10e-2; tmax = 500;
+t = 10e-2; tmax = 5000;
 
 % Cálculo do caminho
 caminho = geraCaminho3(3,3,15.7,1.67)';
