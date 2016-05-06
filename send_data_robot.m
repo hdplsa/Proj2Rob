@@ -8,7 +8,7 @@ function send_data_robot(obj, event, sp)
     v_act = v;
     omega_act = omega;
     
-    pioneer_set_controls(sp,round(v*1000),round(omega*180/pi));
+    pioneer_set_controls(sp,round(v_act*1000),round(omega_act*180/pi));
     
 end
 

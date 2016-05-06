@@ -13,14 +13,13 @@ function [pontos] = geraCaminho3(l1,l2,l3,d, DEBUG)
     end
     
     close all;
-    
-    pontos = [0,0 ; l2/2,l1; l2,l1+d; l2,l3+l1-d; l2+d,l3+l1;
-        l2+l3-d,l3+l1; l2+l3,l3-d+l1; l2+l3,d+l1; l2+l3-d,l1;
-        l2,l1 ; l2/2,l1; 0,0];
+
     
     pontos = [0,0 ; l1-d/2 l2-d; l1 l2-d/2; l1+l3 l2-d/2; l1+l3+d/2 l2;
         l1+l3+d/2 l2+l3; l1+l3 l2+l3+d/2; l1 l2+l3+d/2; l1-d/2 l2+l3;
-        l1-d/2 l2-d; 0 0];
+        l1-d/2 l2-d;1.80,1.69+1.80+l3;1.80,1.69+1.80; 1.80,1.69; 0 0];
+
+
     
     t = linspace(0,5*60,size(pontos,1));
     

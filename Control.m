@@ -2,7 +2,7 @@ function [ v, omega, e ] = Control( x,y,theta,xref,yref,v_last,w_last )
     %Controlador do robot
     
     vmax = 0.15;
-    k1 = 0.5;
+    k1 = 1;
     k2 = 0.3;
     k3 = 5;
       

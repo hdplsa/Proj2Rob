@@ -5,11 +5,12 @@ close all; clear;  delete(timerfindall)
 global x_store y_store t_store v_store w_store x_ref_store y_ref_store e_store h3;
 
 % Inicia a serial port e o robô
-sp = init_robot('COM3');
+sp = init_robot('COM4');
 
 % Posição e orientação auxiliares do robô
-odom = get_odom();
-x = odom(1); y = odom(2); theta = odom(3);
+% odom = get_odom();
+% x = odom(1); y = odom(2); theta = odom(3);
+[x,y,theta] = get_odom2();
 t = 0.5; tmax = 500;
 
 % Cálculo do caminho
@@ -21,11 +22,10 @@ caminho = flipud(caminho')'; caminho = [caminho, [0;0]];
 xref = caminho(1,j); yref = caminho(2,j);
 
 % Iniciação do objeto timer que irá correr o envio da informação
-
 tim = timer('Period', t, 'ExecutionMode', 'fixedRate');
 tim.TimerFcn = {@sendData,sp,caminho(:,j:end)};
 
-% Iniciação de vars auxiliares
+% Inicialização de vars auxiliares
 x_store = zeros(1,tmax/t);
 y_store = zeros(1,tmax/t);
 t_store = zeros(1,tmax/t);
@@ -41,11 +41,10 @@ x_ref_store(1) = xref; y_ref_store(1) = yref;
 start(tim);
 
 % Plots
+time = linspace(0,tmax,tmax/t);
 % Figura 1 - plots espaço/angulo tempo (x,t), (y,t) e (theta,t)
 
 figure; hold on;
-
-time = linspace(0,tmax,tmax/t);
 
 subplot(3,1,1); hold on;
 plot(time,x_ref_store);  title('x');

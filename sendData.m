@@ -16,21 +16,26 @@ function sendData(obj, event, sp, caminho, omega)
     else
         i = i+1;
     end
-    
+    %Verifica referência anterior
     xref = x_ref_store(i-1);
     yref = y_ref_store(i-1);
     
-    odom = get_odom();
-    x = odom(1); y = odom(2); theta = odom(3);
+    %Verifica posição onde se encontra
+    [x,y,theta] = get_odom2();
     
+    %Encontra próximo ponto do caminho para onde convergir
     [xref, yref, aux] = assign_reference(x,y,xref,yref, caminho(:,j:end));
     j = j + aux;
     
-    [v, omega,e] = Control(x,y,theta,xref,yref,v_store(i-1),w_store(i-1));
+    %Determina velocidades pelo algoritmo de controlo
+    [v,omega,e] = Control(x,y,theta,xref,yref,v_store(i-1),w_store(i-1));
+    
+    %Corrige velocidades através dos sonares
+    [v,omega] = CorrectSonar(v,omega);
     
     pioneer_set_controls(sp,round(v*1000),round(omega*180/pi));
     
-    
+    %Grava valores nos vectores
     x_store(i) = x;
     y_store(i) = y;
     t_store(i) = theta;
@@ -45,6 +50,7 @@ function sendData(obj, event, sp, caminho, omega)
         stop(tim);
     end
     
+    %Mostra evolução no gráfico
     update_plots(x_store, y_store, t_store);
     
     fprintf('Ciclo %d\n',i);

@@ -114,7 +114,7 @@ while button
     
     if mod(i,10) == 0
         fprintf('Ciclo %d\n',i);
-        update_plots( h, x_store, y_store, t_store,v_store, w_store, time_store );
+        update_plots( h, x_store, x_ref_store, y_store, y_ref_store, t_store, v_store, w_store, time_store );
     end
 end
 
