@@ -5,7 +5,7 @@ close all; clear;  delete(timerfindall)
 global x_store y_store t_store v_store w_store x_ref_store y_ref_store e_store h3;
 
 % Inicia a serial port e o robô
-sp = init_robot('COM4');
+sp = init_robot('COM');
 
 % Posição e orientação auxiliares do robô
 % odom = get_odom();

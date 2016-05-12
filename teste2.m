@@ -1,14 +1,17 @@
 close all; clear;
 
+global t v omega;
 % Usar um ponteiro laser para medir o erro da odometria
 
 % Posição e orientação auxiliares do robô
 x = 0; y = 0; theta=0;
-t = 10e-2; tmax = 5000;
+var = get_odom2(x,y,theta);
+t = 10e-2; tmax = 500;
 
 % Cálculo do caminho
-caminho = geraCaminho3(3,3,15.7,1.67)';
-caminho = flipud(caminho')'; caminho = [caminho, [0;0]];
+[caminho,paredes] = geraCaminho3(3,3,15.7,1.67); caminho = caminho';
+%caminho = geraCaminho3(3,3,15.7,1.67)';
+%caminho = flipud(caminho')'; caminho = [caminho, [0;0]];
 
 % Procura a posição do caminho mais próxima do robô
 [~,j] = min(sqrt(sum(abs(caminho - repmat([x,y]',1,length(caminho))),1))); j = j(1);
@@ -23,14 +26,19 @@ w_store = zeros(1,tmax/t);
 x_ref_store = zeros(1,tmax/t);
 y_ref_store = zeros(1,tmax/t);
 e_store = zeros(1,tmax/t);
+son1 = zeros(1,tmax/t);
+son2 = zeros(1,tmax/t);
 
 for i = 2:tmax/t
     
     [xref, yref, aux] = assign_reference(x,y,xref,yref, caminho(:,j:end));
     j = j + aux;
+    p = sim_sonares(x,y,theta,paredes{j});
     
     [v, omega,e] = Control(x,y,theta,xref,yref,v_store(i-1),w_store(i-1));
-    [x,y,theta] = Kinematics(v,omega,x,y,theta,t);
+    %[x,y,theta] = Kinematics(v,omega,x,y,theta,t);
+    var = get_odom2(x,y,theta);
+    x = var(1); y = var(2); theta = var(3);
     
     x_store(i) = x;
     y_store(i) = y;

@@ -1,10 +1,10 @@
-function [pontos] = geraCaminho3(l1,l2,l3,d, DEBUG)
+function [pontos, paredes] = geraCaminho3(l1,l2,l3,d, DEBUG)
     
     if nargin == 0
         l1=3;
         l2=3;
         l3=15.7;
-        d=0.5;
+        d=1.67;
         DEBUG=1;
     elseif nargin < 4
         error('Not sufficient input variables');
@@ -14,12 +14,19 @@ function [pontos] = geraCaminho3(l1,l2,l3,d, DEBUG)
     
     close all;
 
-    
     pontos = [0,0 ; l1-d/2 l2-d; l1 l2-d/2; l1+l3 l2-d/2; l1+l3+d/2 l2;
         l1+l3+d/2 l2+l3; l1+l3 l2+l3+d/2; l1 l2+l3+d/2; l1-d/2 l2+l3;
-        l1-d/2 l2-d;1.80,1.69+1.80+l3;1.80,1.69+1.80; 1.80,1.69; 0 0];
+        l1-d/2 l2-d; 0 0];
+    
+    
+%     pontos = [0,0 ; l1-d/2 l2-d; l1 l2-d/2; l1+l3 l2-d/2; l1+l3+d/2 l2;
+%         l1+l3+d/2 l2+l3; l1+l3 l2+l3+d/2; l1 l2+l3+d/2; l1-d/2 l2+l3;
+%         l1-d/2 l2-d;1.80,1.69+1.80+l3;1.80,1.69+1.80; 1.80,1.69; 0 0];
 
-
+    paredes = {{[0; 0],[0; 0]},{[0; 0],[0; 0]},{[1.33; 0],[3; 0]}, ...
+        {[1.33; 0],[3; 0]},{[0; 18.7],[0; 20.37]},{[0; 18.7],[0; 20.37]}, ...
+        {[20.37; 0],[18.7; 0]},{[20.37; 0],[18.7; 0]},{[0; 1.33],[0; 3]}, ...
+        {[0; 1.33],[0; 3]},{[0; 0],[0; 0]},{[0; 0],[0; 0]}};
     
     t = linspace(0,5*60,size(pontos,1));
     

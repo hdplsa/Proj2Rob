@@ -1,14 +1,15 @@
-close all; clear; delete(timerfindall)
+close all;  delete(timerfindall)
 
 % Identifica as vars que guardam dados como globais
 
-global v v_act omega omega_act;
+global v v_act omega omega_act zona;
 
 % Inicia a serial port e o robô
-sp = init_robot('COM3');
+sp = init_robot('COM4');
 
 % Posição e orientação auxiliares do robô
-odom = get_odom();
+%odom = get_odom(0,0,0);
+odom = get_odom(1.865,3.6,pi/2);
 x = odom(1); y = odom(2); theta = odom(3);
 t = 0.5; tmax = 10000; tempo = 0.1;
 
@@ -20,6 +21,7 @@ caminho = flipud(caminho')'; caminho = [caminho, [0;0]];
 [~,j] = min(sqrt(sum(abs(caminho - repmat([x,y]',1,length(caminho))),1))); j = j(1);
 xref = caminho(1,j); yref = caminho(2,j);
 
+j = j +1;
 % Iniciação do objeto timer que irá correr o envio da informação
 
 tim = timer('Period', t, 'ExecutionMode', 'fixedSpacing');
@@ -35,6 +37,8 @@ x_ref_store = zeros(1,tmax/t);
 y_ref_store = zeros(1,tmax/t);
 e_store = zeros(1,tmax/t);
 time_store = zeros(1,tmax/t);
+son_esq = zeros(1,tmax/t);
+son_dir = zeros(1,tmax/t);
 
 x_ref_store(1) = xref; y_ref_store(1) = yref;
 v_act = 0; omega_act = 0; v = 0; omega = 0;
@@ -84,13 +88,41 @@ button = 1;
 i = 2;
 while button
     
-    odom = get_odom();
+    odom = get_odom(x,y,theta);
     x = odom(1); y = odom(2); theta = odom(3);
     
+    sonars = pioneer_read_sonars();
+    try
+        son_esq(i) = sonars(1);
+        son_dir(i) = sonars(end);
+    end
     [xref, yref, aux] = assign_reference(x,y,xref,yref, caminho(:,j:end));
     j = j + aux;
     
-    [v, omega,e] = Control(x,y,theta,xref,yref,v_store(i-1),w_store(i-1));
+    switch j-1
+        case {1,2}
+            zona = 1;
+        case 3
+            zona = 2;
+        case 4
+            zona = 3;
+        case 5
+            zona = 4;
+        case 6
+            zona = 5;
+        case 7
+            zona = 6;
+        case 8
+            zona = 7;
+        case 9
+            zona = 8;
+        case 10
+            zona = 9;
+        case 11
+            zona = 10;
+    end
+    
+    [v, omega,e] = Control(x,y,theta,xref,yref,v_store(i-1),w_store(i-1),sonars);
     
     x_store(i) = x;
     y_store(i) = y;
