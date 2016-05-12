@@ -2,9 +2,9 @@ function [ v, omega, e ] = Control( x,y,theta,xref,yref,v_last,w_last,sonars)
 %Controlador do robot
 
 vmax = 0.15;
-k1 = 1;
-k2 = 0.3;
-k3 = 5;
+k1 = 3;
+k2 = 0.5;
+k3 = 7;
 
 %Determina sinal de erro para controlo de velocidade
 e = sqrt((xref-x)^2+(yref-y)^2);

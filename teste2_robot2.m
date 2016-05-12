@@ -1,8 +1,8 @@
-close all;  delete(timerfindall)
+close all; clear all; clear persistent; clear global;  delete(timerfindall)
 
 % Identifica as vars que guardam dados como globais
 
-global v v_act omega omega_act zona;
+global v v_act omega omega_act zona son_dir son_esq i;
 
 % Inicia a serial port e o robô
 sp = init_robot('COM4');
@@ -92,36 +92,33 @@ while button
     x = odom(1); y = odom(2); theta = odom(3);
     
     sonars = pioneer_read_sonars();
-    try
-        son_esq(i) = sonars(1);
-        son_dir(i) = sonars(end);
-    end
+
     [xref, yref, aux] = assign_reference(x,y,xref,yref, caminho(:,j:end));
     j = j + aux;
     
-    switch j-1
-        case {1,2}
-            zona = 1;
-        case 3
-            zona = 2;
-        case 4
-            zona = 3;
-        case 5
-            zona = 4;
-        case 6
-            zona = 5;
-        case 7
-            zona = 6;
-        case 8
-            zona = 7;
-        case 9
-            zona = 8;
-        case 10
-            zona = 9;
-        case 11
-            zona = 10;
-    end
-    
+%     switch j
+%         case {1,2}
+%             zona = 1;
+%         case 3
+%             zona = 2;
+%         case 4
+%             zona = 3;
+%         case 5
+%             zona = 4;
+%         case 6
+%             zona = 5;
+%         case 7
+%             zona = 6;
+%         case 8
+%             zona = 7;
+%         case 9
+%             zona = 8;
+%         case 10
+%             zona = 9;
+%         case 11
+%             zona = 10;
+%     end
+    zona = 2;
     [v, omega,e] = Control(x,y,theta,xref,yref,v_store(i-1),w_store(i-1),sonars);
     
     x_store(i) = x;
