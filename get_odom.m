@@ -12,7 +12,7 @@ ld = 0.456;
 corredor = 1.67;
 
 if isempty(init)
-    init = [1.865 3.6 pi/2];
+    init = [x_last y_last theta_last];
 end
 
 if isempty(last_odom)
@@ -53,9 +53,13 @@ try
         son_dir(i) = sonars(end);
     end
     
-    %Apenas válido para zonas "normais" do corredor
-    if ((sonars(1)+sonars(end)+lr) <= 2360/1000)
-        % Dependendo da zona, calculamos o theta de forma diferente
+    %Apenas válido para zonas "normais" (rectas) do corredor
+    %Verifica orientação do robot (igual em todas as zonas rectas)
+    %theta = acos(lc/(sonars(1)+ lr +sonars(end)));
+    %if ((sonars(1)+sonars(end)+lr) <= 2360/1000)
+    if ((sonars(1)+sonars(end)+lr) <= 2000/1000)
+     
+    % Dependendo da zona, calculamos o theta de forma diferente
         switch zona
             case 2
                 xx = x;

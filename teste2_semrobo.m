@@ -9,7 +9,7 @@ sp = 1;
 
 % Posição e orientação auxiliares do robô
 %odom = robot.pioneer_read_odometry();
-x = 0; y = 0; theta = 0;
+x = 1.865; y = 3.6; theta = pi/2;
 t = 0.5; tmax = 10000; tempo = 0.1;
 
 % Cálculo do caminho
@@ -87,8 +87,10 @@ while button
     [xref, yref, aux] = assign_reference(x,y,xref,yref, caminho(:,j:end));
     j = j + aux;
     
-    [v, omega,e] = Control(x,y,theta,xref,yref,v_store(i-1),w_store(i-1));
+    [v, omega,e] = Control(x,y,theta,xref,yref,v_store(i-1),w_store(i-1),5000*ones([1,12]),1);
     [x,y,theta] = Kinematics(v_act,omega_act,x,y,theta,tempo);
+    
+    x = x + 0.0005;
     
     x_store(i) = x;
     y_store(i) = y;

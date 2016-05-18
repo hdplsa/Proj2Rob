@@ -19,8 +19,12 @@ close all;
 %         l1-d/2 l2-d; 0 0];
 
 
-pontos = [0,0 ; l1-d/2 l2-d; l1 l2-d/2; l1+l3 l2-d/2; l1+l3+d/2 l2;
-    l1+l3+d/2 l2+l3; l1+l3 l2+l3+d/2; l1 l2+l3+d/2; l1-d/2 l2+l3; l1-d/2 l2+l3/2; l1-d/2 l2-d
+% pontos = [0,0 ; l1-d/2 l2-d; l1 l2-d/2; l1+l3/2 l2-d/2; l1+l3 l2-d/2; l1+l3+d/2 l2; l1+l3+d/2 l2+l3/2;
+%     l1+l3+d/2 l2+l3; l1+l3 l2+l3+d/2; l1+l3/2 l2+l3+d/2; l1 l2+l3+d/2; l1-d/2 l2+l3; l1-d/2 l2+l3/2;
+%     l1-d/2 l2-d; 0 0];
+
+pontos = [0,0 ; l1-d/2 l2-d; l1 l2-d/2; l1+l3/2 l2-d/2; l1+l3 l2-d/2; l1+l3+d/2 l2; l1+l3+d/2 l2+l3/2;
+    l1+l3+d/2 l2+l3; l1+l3 l2+l3+d/2; l1+l3/2 l2+l3+d/2; l1 l2+l3+d/2; l1-d/2 l2+l3; l1-d/2 l2+l3;
     l1-d/2 l2-d; 0 0];
 
 paredes = {{[0; 0],[0; 0]},{[0; 0],[0; 0]},{[1.33; 0],[3; 0]}, ...

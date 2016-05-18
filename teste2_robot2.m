@@ -2,7 +2,10 @@ close all; clear all; clear persistent; clear global;  delete(timerfindall)
 
 % Identifica as vars que guardam dados como globais
 
-global v v_act omega omega_act zona son_dir son_esq i;
+global v v_act omega omega_act zona son_dir son_esq i message new_msg;
+
+javaaddpath('./+QRcode/core-2.1.jar');
+javaaddpath('./+QRcode/javase-2.1.jar');
 
 % Inicia a serial port e o robô
 sp = init_robot('COM4');
@@ -20,12 +23,17 @@ caminho = flipud(caminho')'; caminho = [caminho, [0;0]];
 % Procura a posição do caminho mais próxima do robô
 [~,j] = min(sqrt(sum(abs(caminho - repmat([x,y]',1,length(caminho))),1))); j = j(1);
 xref = caminho(1,j); yref = caminho(2,j);
+j = j + 1;
 
-j = j +1;
+zona = get_zona(j);
+
 % Iniciação do objeto timer que irá correr o envio da informação
 
 tim = timer('Period', t, 'ExecutionMode', 'fixedSpacing');
 tim.TimerFcn = {@send_data_robot,sp};
+
+tim_qr = timer('Period', 0.1, 'ExecutionMode', 'fixedSpacing');
+tim_qr.TimerFcn = {@get_qr};
 
 % Iniciação de vars auxiliares
 x_store = zeros(1,tmax/t);
@@ -92,34 +100,31 @@ while button
     x = odom(1); y = odom(2); theta = odom(3);
     
     sonars = pioneer_read_sonars();
-
-    [xref, yref, aux] = assign_reference(x,y,xref,yref, caminho(:,j:end));
-    j = j + aux;
     
-%     switch j
-%         case {1,2}
-%             zona = 1;
-%         case 3
-%             zona = 2;
-%         case 4
-%             zona = 3;
-%         case 5
-%             zona = 4;
-%         case 6
-%             zona = 5;
-%         case 7
-%             zona = 6;
-%         case 8
-%             zona = 7;
-%         case 9
-%             zona = 8;
-%         case 10
-%             zona = 9;
-%         case 11
-%             zona = 10;
-%     end
-    zona = 2;
-    [v, omega,e] = Control(x,y,theta,xref,yref,v_store(i-1),w_store(i-1),sonars);
+    if zona == 1 || zona == 3 || zona == 5 || zona == 7 || zona == 9
+        [xref, yref, aux] = assign_reference(x,y,xref,yref, caminho(:,j:end));
+        j = j + aux;
+        
+        zona = get_zona(j);   
+    end
+    
+    if new_msg
+        
+        switch message
+            case 1
+                zona = 3;
+            case 2
+                zona = 5;
+            case 3
+                zona = 7;
+            case 4
+                zona = 9;
+            case 5
+                
+        end
+    end
+    
+    [v, omega,e] = Control(x,y,theta,xref,yref,v_store(i-1),w_store(i-1),sonars,zona);
     
     x_store(i) = x;
     y_store(i) = y;

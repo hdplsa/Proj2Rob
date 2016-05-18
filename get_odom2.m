@@ -3,10 +3,11 @@ function [ var ] = get_odom2(x_last,y_last,theta_last)
 %   robot
 
 global t v omega;
-persistent init last_odom zona;
+persistent init last_odom zona i ;
 
 if isempty(init)
     init = [1.80 1.69+1.80 pi/2];
+    i = 1;
 end
 
 if isempty(last_odom)
@@ -59,6 +60,11 @@ end
 
 last_odom = odom;
 
+% if i == 100
+%     x = x-0.1;
+% end
+
 var = [x,y,odom(3) + init(3)];
+% i = i + 1;
 end
 
