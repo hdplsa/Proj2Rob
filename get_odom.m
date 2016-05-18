@@ -54,26 +54,23 @@ try
     end
     
     %Apenas válido para zonas "normais" (rectas) do corredor
-    %Verifica orientação do robot (igual em todas as zonas rectas)
-    %theta = acos(lc/(sonars(1)+ lr +sonars(end)));
-    %if ((sonars(1)+sonars(end)+lr) <= 2360/1000)
-    if ((sonars(1)+sonars(end)+lr) <= 2000/1000)
-     
-    % Dependendo da zona, calculamos o theta de forma diferente
+    if (CorrectionDistance(zona,lc,lr,ld,sonars))     
+    % Dependendo da zona, corrige a posição através de algoritmos
+    % diferentes
         switch zona
             case 2
                 xx = x;
-                theta = acos(lc/(sonars(1)+ lr +sonars(end)));
+                theta = get_orientation(lc,lr,sonars);
                 x = -(sonars(end)+lr/2)*cos(theta) + init(1) + corredor/2;
                 fprintf('Mudei de %f para %f\n',xx,x);
             case 4
-                theta = asin(lc/(sonars(1)+ lr +sonars(end)));
+                theta = get_orientation(lc,lr,sonars);
                 y = (sonars(1)+lr/2)*cos(theta) + init(2);
             case 6
-                theta = asin(lc/(sonars(1)+ lr +sonars(end)));
+                theta = get_orientation(lc,lr,sonars);
                 x = (sonars(end)+lr/2)*sin(theta) + init(1);
             case 8
-                theta = asin(lc/(sonars(1)+ lr +sonars(end)));
+                theta = get_orientation(lc,lr,sonars);
                 y = (sonars(1)+lr/2)*cos(theta) + init(2);
         end;
     end
