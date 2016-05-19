@@ -12,21 +12,36 @@ sonf = (sonars(4)+sonars(5))*0.5;
 theta = get_orientation(lc,lr,sonars);
 %Verifica aberturas (Aplicação da lei dos cossenos)
 gamma = pi/2-theta;
-a = sonar(1); b = 2*a*cos(gamma);
+a = sonars(1); b = 2*a*cos(gamma);
 c = sqrt(a^2+b^2-2*a*b*cos(gamma));
-%Condição natural do corredor (sem aberturas): corrige
-if((c >= 0.9*sonf) && (c <= 1.1*sonf))
+%Para angulos de orientação grandes
+if(theta >= 25*pi/180)
+    %Condição natural do corredor (sem aberturas): corrige
+    if((c >= 0.9*sonf) && (c <= 1.1*sonf))
+        d = true;
+    else
+        %%Testes para situações particulares
+        %Aberturas laterais: não corrige (no futuro, pode corrigir com base no
+        %outro lado apenas)
+        if((sonars(1) >= 2*sonars(end))||(sonars(1) <= 2*sonars(end)))
+           d = false; 
+        end
+        %Pernas dos bancos: não corrige
+        if(sonars(1)+lr+sonars(end) < lc)
+           d = false; 
+        end
+    end
+end
+
+%disp(theta*180/pi);
+
+%Para angulos de orientação pequenos
+if(theta <= 25*pi/180)
+  if((sonars(1) >= lc)||(sonars(end) >= lc))
+    d = false;
+  else
     d = true;
-else
-    %%Testes para situações particulares
-    %Aberturas laterais: não corrige (no futuro, pode corrigir com base no
-    %outro lado apenas)
-    if((sonars(1) >= 2*sonars(end))||(sonars(1) <= 2*sonars(end)))
-       d = false; 
-    end
-    %Pernas dos bancos: não corrige
-    if(sonars(1)+lr+sonars(end) < lc)
-       d = false; 
-    end
+  end
+end
 end
         

@@ -16,19 +16,20 @@ function get_qr(obj, event)
     % the number of the this webcam is not always the same so it may be
     % necessary to adjust the conditions in the if...else...end
     
-    frame = ycbcr2rgb(frame);
-    image( frame );
+%     frame = ycbcr2rgb(frame);
+    %imshow( frame );
     
-    colormap jet
+    colormap gray
     
     % the decoder only works for RGB images
-    message = QRcode.decode_qr( frame );
-    if isempty(message)==0
-        disp( message );
+    mes = QRcode.decode_qr( frame );
+    disp(mes);
+    if isempty(mes)==0
+        disp( mes );
+        message = mes;
         new_msg = 1;
         beep,
     end
-    
     
 end
 

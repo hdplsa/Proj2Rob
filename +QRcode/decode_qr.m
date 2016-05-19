@@ -41,7 +41,7 @@ try
     parsedResult = ResultParser.parseResult(result);
     message = char(result.getText());
 catch e
-    disp(e)
+    disp(e.message)
     message = [];        
 end
 

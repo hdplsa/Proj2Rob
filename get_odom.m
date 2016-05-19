@@ -61,20 +61,21 @@ try
             case 2
                 xx = x;
                 theta = get_orientation(lc,lr,sonars);
-                x = -(sonars(end)+lr/2)*cos(theta) + init(1) + corredor/2;
+                x = -(sonars(end)+lr/2)*cos(theta) + 1.2000 + corredor/2;
                 fprintf('Mudei de %f para %f\n',xx,x);
             case 4
                 theta = get_orientation(lc,lr,sonars);
-                y = (sonars(1)+lr/2)*cos(theta) + init(2);
+                y = 21.81 - (sonars(1)+lr/2)*cos(theta) + corredor/2;
             case 6
                 theta = get_orientation(lc,lr,sonars);
-                x = (sonars(end)+lr/2)*sin(theta) + init(1);
+                x = 18.57 + (sonars(end)+lr/2)*sin(theta) + corredor/2;
             case 8
                 theta = get_orientation(lc,lr,sonars);
-                y = (sonars(1)+lr/2)*cos(theta) + init(2);
+                y = 4.435 + (sonars(1)+lr/2)*cos(theta) - corredor/2;
         end;
     end
-    
+catch e
+   %disp(e);
 end
 
 last_odom = odom;

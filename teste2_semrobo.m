@@ -2,18 +2,18 @@ close all; clear; delete(timerfindall)
 
 % Identifica as vars que guardam dados como globais
 
-global v v_act omega omega_act;
+global v v_act omega omega_act new_msg message;
 
 % Inicia a serial port e o robô
 sp = 1;
 
 % Posição e orientação auxiliares do robô
 %odom = robot.pioneer_read_odometry();
-x = 1.865; y = 3.6; theta = pi/2;
+x = 0; y = 0; theta = 0;
 t = 0.5; tmax = 10000; tempo = 0.1;
 
 % Cálculo do caminho
-caminho = geraCaminho3(2.7,3.6+1.67,15.7,1.67)';
+caminho = geraCaminho3(0.3*4+1.67/2,0.3*12+1.67,15.7,1.67)';
 caminho = flipud(caminho')'; caminho = [caminho, [0;0]];
 
 % Procura a posição do caminho mais próxima do robô
@@ -24,6 +24,9 @@ xref = caminho(1,j); yref = caminho(2,j);
 
 tim = timer('Period', t/10, 'ExecutionMode', 'fixedSpacing');
 tim.TimerFcn = {@send_data,sp};
+
+tim_qr = timer('Period', 0.1, 'ExecutionMode', 'fixedSpacing');
+tim_qr.TimerFcn = {@get_qr};
 
 % Iniciação de vars auxiliares
 x_store = zeros(1,tmax/t);
@@ -79,6 +82,7 @@ h = {h1 h2 h3 h4 h5 h6 h7 h8};
 % Começa o timer que envia os dados para o robo
 
 start(tim);
+start(tim_qr);
 
 button = 1;
 i = 2;
@@ -87,10 +91,46 @@ while button
     [xref, yref, aux] = assign_reference(x,y,xref,yref, caminho(:,j:end));
     j = j + aux;
     
+    zona = get_zona(j);
+    
+    % Detetou um QR Code
+    if new_msg
+        if zona == 2 || zona == 4 || zona == 6 || zona == 8 || zona == 10
+            switch message
+                case '1'
+                    fprintf('zona: %d', zona);
+                    fprintf('message: %s', message);
+                    if zona == 2
+                        zona = 3;
+                        y = 20.97;
+                        disp('mudei para a zona 3');
+                    end
+                case '2'
+                    if zona == 4
+                        zona = 5;
+                        x = 17.73;
+                    end
+                case '3'
+                    if zona == 6
+                        zona = 7;
+                        y = 5.27;
+                    end
+                case '4'
+                    if zona == 8
+                        zona = 9;
+                        x = 2.035;
+                    end
+                otherwise
+                    disp(message);
+            end
+        end
+        new_msg = 0; message = [];
+    end
+    
     [v, omega,e] = Control(x,y,theta,xref,yref,v_store(i-1),w_store(i-1),5000*ones([1,12]),1);
     [x,y,theta] = Kinematics(v_act,omega_act,x,y,theta,tempo);
     
-    x = x + 0.0005;
+    %     x = x + 0.0005;
     
     x_store(i) = x;
     y_store(i) = y;

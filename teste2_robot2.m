@@ -8,16 +8,16 @@ javaaddpath('./+QRcode/core-2.1.jar');
 javaaddpath('./+QRcode/javase-2.1.jar');
 
 % Inicia a serial port e o robô
-sp = init_robot('COM4');
+sp = init_robot('COM3');
 
 % Posição e orientação auxiliares do robô
 %odom = get_odom(0,0,0);
-odom = get_odom(1.865,3.6,pi/2);
+odom = get_odom(1.2,5.2700,pi/2);
 x = odom(1); y = odom(2); theta = odom(3);
 t = 0.5; tmax = 10000; tempo = 0.1;
 
 % Cálculo do caminho
-caminho = geraCaminho3(2.7,3.6+1.67,15.7,1.67)';
+caminho = geraCaminho3(0.3*4+1.67/2,0.3*12+1.67,15.7,1.67)';
 caminho = flipud(caminho')'; caminho = [caminho, [0;0]];
 
 % Procura a posição do caminho mais próxima do robô
@@ -91,6 +91,7 @@ h = {h1 h2 h3 h4 h5 h6 h7 h8};
 % Começa o timer que envia os dados para o robo
 
 start(tim);
+start(tim_qr); % Altura = 0.70m
 
 button = 1;
 i = 2;
@@ -108,20 +109,38 @@ while button
         zona = get_zona(j);   
     end
     
+    % Detetou um QR Code
     if new_msg
-        
-        switch message
-            case 1
-                zona = 3;
-            case 2
-                zona = 5;
-            case 3
-                zona = 7;
-            case 4
-                zona = 9;
-            case 5
-                
+        if zona == 2 || zona == 4 || zona == 6 || zona == 8 || zona == 10
+            switch message
+                case '1'
+                    fprintf('zona: %d', zona);
+                    fprintf('message: %s', message);
+                    if zona == 2
+                        zona = 3;
+                        y = 20.97;
+                        disp('mudei para a zona 3');
+                    end
+                case '2'
+                    if zona == 4
+                        zona = 5;
+                        x = 17.73;
+                    end
+                case '3'
+                    if zona == 6
+                        zona = 7;
+                        y = 5.27;
+                    end
+                case '4'
+                    if zona == 8
+                        zona = 9;
+                        x = 2.035;
+                    end
+                otherwise
+                    disp(message);
+            end
         end
+        new_msg = 0; message = [];
     end
     
     [v, omega,e] = Control(x,y,theta,xref,yref,v_store(i-1),w_store(i-1),sonars,zona);
