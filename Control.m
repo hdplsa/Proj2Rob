@@ -29,11 +29,30 @@ function [ v, omega, e ] = Control( x,y,theta,xref,yref,v_last,w_last,sonars,zon
             case {1,3,5,7,9}
                 v = vmax*tanh(k1*e);
                 omega = vmax*((1+k2*phi/alpha)*tanh(k1*e)/e*sin(alpha)+k3*tanh(alpha));
-            case {2,4,6,8}
+            case {2,6}
                 
                 %Determina sinal de erro para controlo de velocidade
                 e = sqrt((xref-x)^2+(yref-y)^2);
-                phi = atan2((1),(xref-x));
+                phi = atan2((0.7),(xref-x));
+                alpha = phi-theta;
+                
+                if alpha > pi
+                    while alpha > pi
+                        alpha = alpha - 2*pi;
+                    end
+                elseif alpha < -pi
+                    while alpha < -pi
+                        alpha = alpha + 2*pi;
+                    end
+                end
+                
+                v = vmax;
+                omega =  vmax*((1+k2*phi/alpha)*tanh(k1*e)/e*sin(alpha)+k3*tanh(alpha));
+                
+            case {4,8}
+                %Determina sinal de erro para controlo de velocidade
+                e = sqrt((xref-x)^2+(yref-y)^2);
+                phi = atan2((yref-yref),(1));
                 alpha = phi-theta;
                 
                 if alpha > pi
@@ -80,22 +99,26 @@ function [ v, omega, e ] = Control( x,y,theta,xref,yref,v_last,w_last,sonars,zon
     % Impede que o controlador imponha controlos com variações bruscas,
     % colocando uma saturação na variação entre ciclos
     %
-%             delta_v = 0.05;
-%             delta_w = 0.05;
-%     
-%             if abs(v) > abs(v_last) + delta_v
-%                 v = v_last + sign(v)*delta_v;
-%             elseif abs(v) < abs(v_last) - delta_v
-%                 v = v_last - sign(v)*delta_v;
-%             end
-%     
-%             dif = omega - w_last;
-%     
-%             if dif >= delta_w
-%                 omega = w_last + delta_w;
-%             elseif dif < - delta_w
-%                 omega = w_last - delta_w;
-%             end
+    %             delta_v = 0.05;
+    %             delta_w = 0.05;
+    %
+    %             if abs(v) > abs(v_last) + delta_v
+    %                 v = v_last + sign(v)*delta_v;
+    %             elseif abs(v) < abs(v_last) - delta_v
+    %                 v = v_last - sign(v)*delta_v;
+    %             end
+    %
+    %             dif = omega - w_last;
+    %
+    %             if dif >= delta_w
+    %                 omega = w_last + delta_w;
+    %             elseif dif < - delta_w
+    %                 omega = w_last - delta_w;
+    %             end
+    
+    if v < 0.05 && omega < 0.3
+        v = 0.05;
+    end
     
 end
 

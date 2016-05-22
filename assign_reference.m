@@ -11,7 +11,7 @@ function [ x_ref, y_ref, j ] = assign_reference( x, y, x_ref, y_ref, caminho )
         
         %[x_ref, y_ref, j] = find_next(x,y, caminho);
         
-    elseif sqrt((x_ref-x)^2+(y_ref-y)^2) < 30e-2
+    elseif sqrt((x_ref-x)^2+(y_ref-y)^2) < 10e-2
         
         % Mensagens de debug porque o as funções com timer não param nos
         % breakpoints
@@ -35,7 +35,7 @@ function [x_ref, y_ref ,j] = find_next( x, y, caminho )
     dist = sqrt((caminho(1,j)-x)^2+(caminho(2,j)-y)^2);
     
     % Se o ponto já estiver numa posição passada, encontra ponto seguinte
-    while( atan((y-caminho(2,j))/(x-caminho(1,j))) > pi/2 && dist < 0.5)
+    while( atan((y-caminho(2,j))/(x-caminho(1,j))) > pi/2 && dist < 0.3)
         
         j = j+1;
         dist = sqrt((caminho(1,j)-x)^2+(caminho(2,j)-y)^2);

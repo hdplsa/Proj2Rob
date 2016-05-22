@@ -4,15 +4,16 @@ close all; clear all; clear persistent; clear global;  delete(timerfindall)
 
 global v v_act omega omega_act zona son_dir son_esq i message new_msg;
 
-javaaddpath('./+QRcode/core-2.1.jar');
-javaaddpath('./+QRcode/javase-2.1.jar');
+javaaddpath('./+QRcode/core-3.2.1.jar');
+javaaddpath('./+QRcode/javase-3.2.1.jar');
 
 % Inicia a serial port e o robô
 sp = init_robot('COM3');
 
 % Posição e orientação auxiliares do robô
-%odom = get_odom(0,0,0);
-odom = get_odom(1.2,5.2700,pi/2);
+odom = get_odom(0,0,0);
+%odom = get_odom(1.2,5.2700,pi/2);
+%odom = get_odom(2.035,22.03,0);
 x = odom(1); y = odom(2); theta = odom(3);
 t = 0.5; tmax = 10000; tempo = 0.1;
 
@@ -106,25 +107,44 @@ while button
         [xref, yref, aux] = assign_reference(x,y,xref,yref, caminho(:,j:end));
         j = j + aux;
         
-        zona = get_zona(j);   
+        zona = get_zona(j);
     end
     
     % Detetou um QR Code
     if new_msg
         if zona == 2 || zona == 4 || zona == 6 || zona == 8 || zona == 10
+            disp('cheguei aqui');
             switch message
                 case '1'
-                    fprintf('zona: %d', zona);
-                    fprintf('message: %s', message);
+                    fprintf('zona: %d\n', zona);
+                    fprintf('message: %s\n', message);
                     if zona == 2
-                        zona = 3;
+                        %zona = 3;
                         y = 20.97;
-                        disp('mudei para a zona 3');
+                        
+                        j = j+1;
+                        xref = caminho(1,j);
+                        yref = caminho(2,j);
+                        %                         [xref, yref, aux] = assign_reference(x,y,xref,yref, caminho(:,j:end));
+                        %                         j = j + aux;
+                        
+                        zona = get_zona(j);
+                        fprintf('Novo ponto: (%g,%g)\n', xref, yref);
+                        fprintf('mudei para a zona %d\n',zona);
                     end
                 case '2'
                     if zona == 4
-                        zona = 5;
+                        %zona = 5;
                         x = 17.73;
+                        
+                        [xref, yref, aux] = assign_reference(x,y,xref,yref, caminho(:,j:end));
+                        j = j + aux;
+                        
+                        zona = get_zona(j);
+                        fprintf('ponto: (%g,%g)\n', x, y);
+                        fprintf('Novo ponto: (%g,%g)\n', xref, yref);
+                        fprintf('mudei para a zona %d\n',zona);
+                        
                     end
                 case '3'
                     if zona == 6

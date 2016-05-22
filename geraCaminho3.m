@@ -1,5 +1,11 @@
 function [pontos, paredes] = geraCaminho3(l1,l2,l3,d, DEBUG)
 
+    %largura do robot
+lc = 1.67;
+lr = 0.270;
+ld = 0.456;
+corredor = 1.67;
+    
 if nargin == 0
     l1=3;
     l2=3;
@@ -24,7 +30,7 @@ close all;
 %     l1-d/2 l2-d; 0 0];
 
 pontos = [0,0 ;0.3*4 0.3*4; l1-d/2 l2-d; l1 l2-d/2; l1+l3 l2-d/2; l1+l3+d/2 l2; 
-    l1+l3+d/2 l2+l3; l1+l3 l2+l3+d/2;  l1 l2+l3+d/2; l1-d/2 l2+l3; 0.3*4 0.3*12+l3+d; 0.3*4 0.3*12+d;
+    l1+l3+d/2 l2+l3; l1+l3 l2+l3+ld+(d-ld)*0.5;  l1 l2+l3+ld+(d-ld)*0.5;  0.3*4 0.3*12+l3+d; 0.3*4 0.3*12+d;
     0.3*4 0.3*4; 0 0];
 
 t = linspace(0,5*60,size(pontos,1));

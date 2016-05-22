@@ -64,8 +64,10 @@ try
                 x = -(sonars(end)+lr/2)*cos(theta) + 1.2000 + corredor/2;
                 fprintf('Mudei de %f para %f\n',xx,x);
             case 4
+                yy = y;
                 theta = get_orientation(lc,lr,sonars);
-                y = 21.81 - (sonars(1)+lr/2)*cos(theta) + corredor/2;
+                y = 22.03 - (sonars(1)+lr/2)*cos(theta) + corredor/2;
+                 fprintf('Mudei de %f para %f\n',yy,y);
             case 6
                 theta = get_orientation(lc,lr,sonars);
                 x = 18.57 + (sonars(end)+lr/2)*sin(theta) + corredor/2;
