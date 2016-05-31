@@ -23,11 +23,11 @@ if(theta >= 25*pi/180)
         %%Testes para situações particulares
         %Aberturas laterais: não corrige (no futuro, pode corrigir com base no
         %outro lado apenas)
-        if((sonars(1) >= 2*sonars(end))||(sonars(1) <= 2*sonars(end)))
+        if((sonars(1) >= 2*sonars(8))||(sonars(1) <= 2*sonars(8)))
            d = false; 
         end
         %Pernas dos bancos: não corrige
-        if(sonars(1)+lr+sonars(end) < lc)
+        if(sonars(1)+lr+sonars(8) < lc)
            d = false; 
         end
     end
@@ -37,11 +37,24 @@ end
 
 %Para angulos de orientação pequenos
 if(theta <= 25*pi/180)
-  if((sonars(1) >= lc)||(sonars(end) >= lc))
+  if((sonars(1) >= lc)||(sonars(8) >= lc))
     d = false;
   else
     d = true;
   end
+  %Pernas dos bancos: não corrige
+    if(sonars(1)+lr+sonars(8) < lc)
+       d = false; 
+    end
 end
+
+%Verifica variações bruscas de leitura
+% if(sonar(1)/son_esq(end) < 0.8 || sonar(1)/son_esq(end) > 1.2)
+%    d = false; 
+% end
+% if(sonar(and)/son_dir(end) < 0.8 || sonar(end)/son_dir(end) > 1.2)
+%    d = false; 
+% end
+
 end
         

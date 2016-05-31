@@ -1,4 +1,7 @@
 function [ x_ref, y_ref, j ] = assign_reference( x, y, x_ref, y_ref, caminho )
+    
+    global zona;
+    
     % Vamos verificar se a direção do vetor da posição robô -> referência é
     % -180, ou seja, o robo está à frente da referencia ou se estamos
     % suficientemente próximos do próximo ponto para podermos devolver o
@@ -24,7 +27,15 @@ function [ x_ref, y_ref, j ] = assign_reference( x, y, x_ref, y_ref, caminho )
         [x_ref, y_ref, j] = find_next(x,y, caminho);
         
         fprintf('Nova ref, x_ref: %f; y_ref: %f\n',x_ref,y_ref);
+        
+    end
     
+    if zona == 2
+        if sqrt((y_ref-y)^2) < 10e-2
+            [x_ref, y_ref, j] = find_next(x,y, caminho);
+            
+            fprintf('Nova ref, x_ref: %f; y_ref: %f\n',x_ref,y_ref);
+        end
     end
     
 end

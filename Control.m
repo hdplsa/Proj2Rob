@@ -1,6 +1,19 @@
 function [ v, omega, e ] = Control( x,y,theta,xref,yref,v_last,w_last,sonars,zona)
     %Controlador do robot
     
+%     persistent wall;
+%     
+%     if isempty(wall)
+%         wall = 0;
+%     end
+%     
+%     if wall == 1
+%         v=0; omega = 0; e = 0;
+%         return;
+%     end
+%     
+%     wall = WallDetect(sonars,1.67);
+    
     vmax = 0.20;
     k1 = 0.25;
     k2 = 0.5;
@@ -33,7 +46,7 @@ function [ v, omega, e ] = Control( x,y,theta,xref,yref,v_last,w_last,sonars,zon
                 
                 %Determina sinal de erro para controlo de velocidade
                 e = sqrt((xref-x)^2+(yref-y)^2);
-                phi = atan2((0.7),(xref-x));
+                phi = atan2((sign(yref-y)*1),(xref-x));
                 alpha = phi-theta;
                 
                 if alpha > pi
@@ -52,7 +65,7 @@ function [ v, omega, e ] = Control( x,y,theta,xref,yref,v_last,w_last,sonars,zon
             case {4,8}
                 %Determina sinal de erro para controlo de velocidade
                 e = sqrt((xref-x)^2+(yref-y)^2);
-                phi = atan2((yref-yref),(1));
+                phi = atan2((yref-y),(sign(xref-x)*1));
                 alpha = phi-theta;
                 
                 if alpha > pi
@@ -82,7 +95,7 @@ function [ v, omega, e ] = Control( x,y,theta,xref,yref,v_last,w_last,sonars,zon
     
     %Não bate contra paredes
     try
-        if ((sonars(4)+sonars(5))/2 <= 350)
+        if ((sonars(4)+sonars(5))/2 <= 0.450)
             v = 0;
             omega = 0;
         end
@@ -116,9 +129,11 @@ function [ v, omega, e ] = Control( x,y,theta,xref,yref,v_last,w_last,sonars,zon
     %                 omega = w_last - delta_w;
     %             end
     
-    if v < 0.05 && omega < 0.3
-        v = 0.05;
+    if v < 0.10 && omega < 0.3
+        v = 0.10;
     end
+    
+    
     
 end
 

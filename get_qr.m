@@ -5,7 +5,7 @@ function get_qr(obj, event)
     
     if isempty(cam)
         
-        cam = webcam(1); 
+        cam = webcam(1);   
          
     end
     

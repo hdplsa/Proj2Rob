@@ -127,7 +127,7 @@ while button
         new_msg = 0; message = [];
     end
     
-    [v, omega,e] = Control(x,y,theta,xref,yref,v_store(i-1),w_store(i-1),5000*ones([1,12]),1);
+    [v, omega,e] = Control(x,y,theta,xref,yref,v_store(i-1),w_store(i-1),5000*ones([1,12]),zona);
     [x,y,theta] = Kinematics(v_act,omega_act,x,y,theta,tempo);
     
     %     x = x + 0.0005;

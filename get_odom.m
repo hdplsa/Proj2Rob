@@ -5,11 +5,10 @@ global zona son_esq son_dir i;
 % Estas variaveis permanecem inalteradas mesmo após acabar a função
 persistent init last_odom;
 
-%largura do robot
-lc = 1.67;
-lr = 0.270;
-ld = 0.456;
-corredor = 1.67;
+%Medidas do percurso
+lc = 1.695; %largura do corredor
+lr = 0.268; %largura do robot
+ld = 0.455; %largura das pernas dos bancos
 
 if isempty(init)
     init = [x_last y_last theta_last];
@@ -46,7 +45,7 @@ y = y_last + delta*sin(odom(3) + init(3));
 try
     
     % Lê o valor dos sonares (esquerda -> 1, direita -> end)
-    sonars = pioneer_read_sonars(); sonars = sonars/1000;
+    sonars = pioneer_read_sonars(); sonars = sonars/1000; sonars = sonars(1:8);
     
     try
         son_esq(i) = sonars(1);
@@ -61,19 +60,19 @@ try
             case 2
                 xx = x;
                 theta = get_orientation(lc,lr,sonars);
-                x = -(sonars(end)+lr/2)*cos(theta) + 1.2000 + corredor/2;
+                x = -(sonars(end)+lr/2)*cos(theta) + 1.2000 + 1.69/2;
                 fprintf('Mudei de %f para %f\n',xx,x);
             case 4
                 yy = y;
                 theta = get_orientation(lc,lr,sonars);
-                y = 22.03 - (sonars(1)+lr/2)*cos(theta) + corredor/2;
+                y = 19.6500 - (sonars(1)+lr/2)*cos(theta);
                  fprintf('Mudei de %f para %f\n',yy,y);
             case 6
                 theta = get_orientation(lc,lr,sonars);
-                x = 18.57 + (sonars(end)+lr/2)*sin(theta) + corredor/2;
+                x = 15.6825 + (sonars(1)+lr/2)*cos(theta);
             case 8
                 theta = get_orientation(lc,lr,sonars);
-                y = 4.435 + (sonars(1)+lr/2)*cos(theta) - corredor/2;
+                y = 3.6 + (sonars(1)+lr/2)*cos(theta);
         end;
     end
 catch e

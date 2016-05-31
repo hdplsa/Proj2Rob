@@ -4,6 +4,11 @@ close all; clear all; clear persistent; clear global;  delete(timerfindall)
 
 global v v_act omega omega_act zona son_dir son_esq i message new_msg;
 
+%Medidas do percurso
+lc = 1.695; %largura do corredor
+lr = 0.268; %largura do robot
+ld = 0.455; %largura das pernas dos bancos
+
 javaaddpath('./+QRcode/core-3.2.1.jar');
 javaaddpath('./+QRcode/javase-3.2.1.jar');
 
@@ -11,9 +16,9 @@ javaaddpath('./+QRcode/javase-3.2.1.jar');
 sp = init_robot('COM3');
 
 % Posição e orientação auxiliares do robô
-odom = get_odom(0,0,0);
+%odom = get_odom(0,0,0);
 %odom = get_odom(1.2,5.2700,pi/2);
-%odom = get_odom(2.035,22.03,0);
+odom = get_odom(2.045,19.04,0);
 x = odom(1); y = odom(2); theta = odom(3);
 t = 0.5; tmax = 10000; tempo = 0.1;
 
@@ -92,7 +97,7 @@ h = {h1 h2 h3 h4 h5 h6 h7 h8};
 % Começa o timer que envia os dados para o robo
 
 start(tim);
-start(tim_qr); % Altura = 0.70m
+%start(tim_qr); % Altura = 0.70m
 
 button = 1;
 i = 2;
@@ -100,69 +105,101 @@ while button
     
     odom = get_odom(x,y,theta);
     x = odom(1); y = odom(2); theta = odom(3);
+    %Recebe leitura dos sonares
+    sonars = pioneer_read_sonars()/1000; sonars = sonars(1:8);
     
-    sonars = pioneer_read_sonars();
+    [xref, yref, aux] = assign_reference(x,y,xref,yref, caminho(:,j:end));
+    j = j + aux;
     
-    if zona == 1 || zona == 3 || zona == 5 || zona == 7 || zona == 9
-        [xref, yref, aux] = assign_reference(x,y,xref,yref, caminho(:,j:end));
-        j = j + aux;
-        
-        zona = get_zona(j);
-    end
-    
+    zona = get_zona(j);
+
     % Detetou um QR Code
-    if new_msg
-        if zona == 2 || zona == 4 || zona == 6 || zona == 8 || zona == 10
-            disp('cheguei aqui');
-            switch message
-                case '1'
-                    fprintf('zona: %d\n', zona);
-                    fprintf('message: %s\n', message);
-                    if zona == 2
-                        %zona = 3;
-                        y = 20.97;
-                        
-                        j = j+1;
-                        xref = caminho(1,j);
-                        yref = caminho(2,j);
-                        %                         [xref, yref, aux] = assign_reference(x,y,xref,yref, caminho(:,j:end));
-                        %                         j = j + aux;
-                        
-                        zona = get_zona(j);
-                        fprintf('Novo ponto: (%g,%g)\n', xref, yref);
-                        fprintf('mudei para a zona %d\n',zona);
-                    end
-                case '2'
-                    if zona == 4
-                        %zona = 5;
-                        x = 17.73;
-                        
-                        [xref, yref, aux] = assign_reference(x,y,xref,yref, caminho(:,j:end));
-                        j = j + aux;
-                        
-                        zona = get_zona(j);
-                        fprintf('ponto: (%g,%g)\n', x, y);
-                        fprintf('Novo ponto: (%g,%g)\n', xref, yref);
-                        fprintf('mudei para a zona %d\n',zona);
-                        
-                    end
-                case '3'
-                    if zona == 6
-                        zona = 7;
-                        y = 5.27;
-                    end
-                case '4'
-                    if zona == 8
-                        zona = 9;
-                        x = 2.035;
-                    end
-                otherwise
-                    disp(message);
-            end
-        end
-        new_msg = 0; message = [];
-    end
+%     if new_msg
+%         if zona == 2 || zona == 4 || zona == 6 || zona == 8
+%             switch message
+%                 case '1'
+%                     if zona == 2 % Atenção à zona
+% 
+%                         y = ; %colocar valor
+%                         
+%                         fprintf('Atualizei o valor de y para %g',y);
+%                         fprintf('A zona é a %d',zona);
+%                         
+%                     end
+%                 case '2'
+%                     if zona == 2 % Atenção à zona
+%                         
+%                         y = ; %colocar valor
+%                         
+%                         fprintf('Atualizei o valor de y para %g',y);
+%                         fprintf('A zona é a %d',zona);
+%                         
+%                     end
+%                 case '3'
+%                     if zona == 4 % Atenção à zona
+%                         
+%                         x = ; %colocar valor
+%                         
+%                         fprintf('Atualizei o valor de x para %g',x);
+%                         fprintf('A zona é a %d',zona);
+%                         
+%                     end
+%                 case '4'
+%                     if zona == 4
+%                         
+%                         x = ; %colocar valor
+%                         
+%                         fprintf('Atualizei o valor de x para %g',x);
+%                         fprintf('A zona é a %d',zona);
+%                         
+%                     end
+%                 case '5'
+%                     if zona == 6
+%                         
+%                         y = ; %colocar valor
+%                         
+%                         fprintf('Atualizei o valor de y para %g',y);
+%                         fprintf('A zona é a %d',zona);
+%                         
+%                     end
+%                 case '6'
+%                     if zona == 6
+%                         
+%                         y = ; %colocar valor
+%                         
+%                         fprintf('Atualizei o valor de y para %g',y);
+%                         fprintf('A zona é a %d',zona);
+%                         
+%                     end
+%                 case '7'
+%                     if zona == 8
+%                         
+%                         x = ; %colocar valor
+%                         
+%                         fprintf('Atualizei o valor de x para %g',x);
+%                         fprintf('A zona é a %d',zona);
+%                         
+%                     end
+%                 case '8'
+%                     if zona == 8
+%                         
+%                         x = ; %colocar valor
+%                         
+%                         fprintf('Atualizei o valor de x para %g',x);
+%                         fprintf('A zona é a %d',zona);
+%                         
+%                     end
+%                 %case '9'
+%                 %case '10'
+%                 otherwise
+%                     disp(message);
+%             end
+%         end
+%         new_msg = 0; message = [];
+%     end
     
+    %WallDetect(sonars,lc);
+    %Controlador de velocidades
     [v, omega,e] = Control(x,y,theta,xref,yref,v_store(i-1),w_store(i-1),sonars,zona);
     
     x_store(i) = x;

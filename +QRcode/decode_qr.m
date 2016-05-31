@@ -32,12 +32,12 @@ import com.google.zxing.client.result.ResultParser;
 
 jimg = im2java2d(img);
 
-frame = javax.swing.JFrame;
-icon = javax.swing.ImageIcon(jimg);
-label = javax.swing.JLabel(icon);
-frame.getContentPane.add(label);
-frame.pack
-frame.show
+% frame = javax.swing.JFrame;
+% icon = javax.swing.ImageIcon(jimg);
+% label = javax.swing.JLabel(icon);
+% frame.getContentPane.add(label);
+% frame.pack
+% frame.show
 
 source = BufferedImageLuminanceSource(jimg);
 
